@@ -7,18 +7,19 @@ local M = {}
 
 M.base46 = {
 	theme = "catppuccin",
-
-	-- hl_override = {
-	-- 	Comment = { italic = true },
-	-- 	["@comment"] = { italic = true },
-	-- },
 }
 
--- M.nvdash = { load_on_startup = true }
--- M.ui = {
---       tabufline = {
---          lazyload = false
---      }
---}
+M.nvdash = { load_on_startup = true }
+
+M.ui = {
+  cmp = {
+    icons_left = true,
+    style = "atom_colored",
+    icons = true,
+    format_colors = {
+      tailwind = true,
+    },
+  },
+}
 
 return M
