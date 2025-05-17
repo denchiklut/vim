@@ -13,6 +13,10 @@ M.nvdash = {
   load_on_startup = true,
 }
 
+M.lsp = {
+  signature = false,
+}
+
 M.ui = {
   cmp = {
     style = "atom_colored",
