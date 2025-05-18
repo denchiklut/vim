@@ -83,9 +83,25 @@ return {
   },
   {
     "folke/trouble.nvim",
-    opts = {},
     cmd = "Trouble",
+    opts = {},
     keys = require("configs.trouble").keys,
+  },
+  {
+    "kevinhwang91/nvim-ufo",
+    event = "VeryLazy",
+    dependencies = {
+      "kevinhwang91/promise-async",
+      {
+        "luukvbaal/statuscol.nvim",
+        config = function()
+          require "configs.statuscol"
+        end,
+      },
+    },
+    config = function()
+      require "configs.ufo"
+    end,
   },
   {
     "vim-test/vim-test",
@@ -150,6 +166,7 @@ return {
     "echasnovski/mini.ai",
     event = "VeryLazy",
     version = "*",
+    opts = {},
   },
   {
     "echasnovski/mini.move",
@@ -221,5 +238,9 @@ return {
       file_types = { "markdown", "codecompanion" },
     },
     ft = { "markdown", "codecompanion" },
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
+      require("configs.highlight").setup()
+    end,
   },
 }
