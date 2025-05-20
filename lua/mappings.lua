@@ -37,10 +37,7 @@ map("n", "<leader>T", ":TestFile<cr>", { silent = true })
 map("n", "<leader>s", ":TestSuite<cr>", { silent = true })
 map("n", "<leader>l", ":TestLast<cr>", { silent = true })
 
-map({ "i", "n" }, "<C-x>", "copilot#Dismiss()", { expr = true, silent = true, desc = "Copilot: Dismiss" })
-map("i", "<C-e>", "copilot#Accept()", { expr = true, silent = true, desc = "Copilot: Accept" })
-map("i", "<C-n>", "copilot#Next()", { expr = true, silent = true, desc = "Copilot: Next" })
-map("i", "<C-p>", "copilot#Previous()", { expr = true, silent = true, desc = "Copilot: Previous" })
+map("i", "<M-Space>", "copilot#Accept()", { expr = true, replace_keycodes = false, desc = "Copilot: Accept" })
 
 map({ "n", "v" }, "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
 map({ "n", "v" }, "<leader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true })
