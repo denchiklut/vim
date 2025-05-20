@@ -2,12 +2,14 @@ require "nvchad.mappings"
 
 local map = vim.keymap.set
 local builtin = require "telescope.builtin"
+local buf = require "configs.buffer"
 
 map("i", "jj", "<esc>")
 map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 map("n", ";", ":", { desc = "Enter command mode" })
 
 map("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory" })
+map("n", "<leader>bo", buf.closeOther, { desc = "Close other buffers" })
 
 map("n", "<leader>gc", ":Neogit commit<cr>", { desc = "Commit changes" })
 map("n", "<leader>gp", ":Neogit push<cr>", { desc = "Push changes" })
@@ -26,11 +28,11 @@ map("n", "<leader>tp", ":tabprevious<cr>", { silent = true, desc = "Previous tab
 map("n", "<leader>tt", ":tabnew<cr>", { silent = true, desc = "New tab" })
 map("n", "<leader>tx", ":tabclose<cr>", { silent = true, desc = "Close tab" })
 
-map("n", "<A-h>", ":TmuxNavigateLeft<cr>", { silent = true })
-map("n", "<A-j>", ":TmuxNavigateDown<cr>", { silent = true })
-map("n", "<A-k>", ":TmuxNavigateUp<cr>", { silent = true })
-map("n", "<A-l>", ":TmuxNavigateRight<cr>", { silent = true })
-map("n", "<A-\\>", ":TmuxNavigatePrevious<cr>", { silent = true })
+map("n", "<M-h>", ":TmuxNavigateLeft<cr>", { silent = true })
+map("n", "<M-j>", ":TmuxNavigateDown<cr>", { silent = true })
+map("n", "<M-k>", ":TmuxNavigateUp<cr>", { silent = true })
+map("n", "<M-l>", ":TmuxNavigateRight<cr>", { silent = true })
+map("n", "<M-\\>", ":TmuxNavigatePrevious<cr>", { silent = true })
 
 map("n", "<leader>u", ":TestNearest<cr>", { silent = true })
 map("n", "<leader>T", ":TestFile<cr>", { silent = true })
