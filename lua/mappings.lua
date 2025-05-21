@@ -1,12 +1,16 @@
 require "nvchad.mappings"
 
 local map = vim.keymap.set
+local del = vim.keymap.del
+
 local builtin = require "telescope.builtin"
 local buf = require "configs.buffer"
 
 map("i", "jj", "<esc>")
 map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 map("n", ";", ":", { desc = "Enter command mode" })
+
+del("n", "<leader>h")
 
 map("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory" })
 map("n", "<leader>bo", buf.closeOther, { desc = "Close other buffers" })
