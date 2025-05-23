@@ -32,11 +32,11 @@ map("n", "<leader>tp", ":tabprevious<cr>", { silent = true, desc = "Previous tab
 map("n", "<leader>tt", ":tabnew<cr>", { silent = true, desc = "New tab" })
 map("n", "<leader>tx", ":tabclose<cr>", { silent = true, desc = "Close tab" })
 
-map("n", "<M-h>", ":TmuxNavigateLeft<cr>", { silent = true })
-map("n", "<M-j>", ":TmuxNavigateDown<cr>", { silent = true })
-map("n", "<M-k>", ":TmuxNavigateUp<cr>", { silent = true })
-map("n", "<M-l>", ":TmuxNavigateRight<cr>", { silent = true })
-map("n", "<M-\\>", ":TmuxNavigatePrevious<cr>", { silent = true })
+map("n", "<C-h>", ":TmuxNavigateLeft<cr>", { silent = true })
+map("n", "<C-j>", ":TmuxNavigateDown<cr>", { silent = true })
+map("n", "<C-k>", ":TmuxNavigateUp<cr>", { silent = true })
+map("n", "<C-l>", ":TmuxNavigateRight<cr>", { silent = true })
+map("n", "<C-\\>", ":TmuxNavigatePrevious<cr>", { silent = true })
 
 map("n", "<leader>u", ":TestNearest<cr>", { silent = true })
 map("n", "<leader>T", ":TestFile<cr>", { silent = true })
