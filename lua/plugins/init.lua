@@ -25,6 +25,18 @@ return {
       },
     },
   },
+  { "nvzone/volt", lazy = true },
+  { "nvzone/menu", lazy = true },
+  {
+    "nvzone/minty",
+    cmd = { "Shades", "Huefy" },
+  },
+  {
+    "nvzone/typr",
+    dependencies = "nvzone/volt",
+    opts = {},
+    cmd = { "Typr", "TyprStats" },
+  },
   {
     "lewis6991/gitsigns.nvim",
     opts = require "configs.gitsigns",

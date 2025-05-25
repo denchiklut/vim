@@ -5,12 +5,14 @@ local del = vim.keymap.del
 
 local builtin = require "telescope.builtin"
 local buf = require "configs.buffer"
+local volt = require "configs.volt"
 
+volt.setup()
+
+del("n", "<leader>h")
 map("i", "jj", "<esc>")
 map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 map("n", ";", ":", { desc = "Enter command mode" })
-
-del("n", "<leader>h")
 
 map("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory" })
 map("n", "<leader>bo", buf.closeOther, { desc = "Close other buffers" })
@@ -44,6 +46,7 @@ map("n", "<leader>s", ":TestSuite<cr>", { silent = true })
 map("n", "<leader>l", ":TestLast<cr>", { silent = true })
 
 map("i", "<M-Space>", "copilot#Accept()", { expr = true, replace_keycodes = false, desc = "Copilot: Accept" })
+map("i", "<M-c>", "copilot#Dismiss()", { expr = true, replace_keycodes = false, desc = "Copilot: Dismiss" })
 
 map({ "n", "v" }, "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
 map({ "n", "v" }, "<leader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true })
