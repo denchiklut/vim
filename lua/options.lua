@@ -18,3 +18,25 @@ vim.api.nvim_create_autocmd("BufDelete", {
     end
   end,
 })
+
+-- Workaround for truncating long TypeScript inlay hints.
+-- TODO: Remove this if https://github.com/neovim/neovim/issues/27240 gets addressed.
+local methods = vim.lsp.protocol.Methods
+local inlay_hint_handler = vim.lsp.handlers[methods.textDocument_inlayHint]
+
+vim.lsp.handlers[methods.textDocument_inlayHint] = function(err, result, ctx, config)
+  local client = vim.lsp.get_client_by_id(ctx.client_id)
+  if client and client.name == "typescript-tools" and type(result) == "table" then
+    result = vim.tbl_map(function(hint)
+      local label = hint.label
+      if type(label) == "string" and #label > 30 then
+        label = label:sub(1, 29) .. "..."
+      end
+
+      hint.label = label
+      return hint
+    end, result)
+  end
+
+  inlay_hint_handler(err, result, ctx, config)
+end
