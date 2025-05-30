@@ -48,9 +48,32 @@ map("n", "<leader>l", ":TestLast<cr>", { silent = true })
 map("i", "<M-Space>", "copilot#Accept()", { expr = true, replace_keycodes = false, desc = "Copilot: Accept" })
 map("i", "<M-c>", "copilot#Dismiss()", { expr = true, replace_keycodes = false, desc = "Copilot: Dismiss" })
 
-map({ "n", "v" }, "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
-map({ "n", "v" }, "<leader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true })
-map("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true })
+map("v", "ga", ":CodeCompanionChat Add<cr>", { desc = "Code Companion Add to chat", noremap = true, silent = true })
+map(
+  { "n", "v" },
+  "<C-a>",
+  ":CodeCompanionActions<cr>",
+  { desc = "Code Companion Actions", noremap = true, silent = true }
+)
+map(
+  { "n", "v" },
+  "<leader>aa",
+  ":CodeCompanionChat Toggle<cr>",
+  { desc = "Code Companion Toggle Chat", noremap = true, silent = true }
+)
+map(
+  { "n", "v" },
+  "<leader>ai",
+  ":CodeCompanion<cr>",
+  { desc = "Code Companion Inline Prompt", noremap = true, silent = true }
+)
+
+map(
+  { "n", "v" },
+  "<leader>ai",
+  ":CodeCompanion<cr>",
+  { desc = "Code Companion Inline Prompt", noremap = true, silent = true }
+)
 
 map("n", "<leader>ih", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())

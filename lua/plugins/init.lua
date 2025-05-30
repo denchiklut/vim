@@ -167,6 +167,31 @@ return {
     keys = require("configs.flash").keys,
   },
   {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = {
+      styles = {
+        above_cursor = {
+          backdrop = false,
+          position = "float",
+          title_pos = "left",
+          noautocmd = true,
+          relative = "cursor",
+          row = -3,
+          col = 0,
+        },
+      },
+      input = {
+        enabled = true,
+        win = {
+          style = "above_cursor",
+        },
+      },
+      bigfile = { enabled = true },
+    },
+  },
+  {
     "windwp/nvim-ts-autotag",
     event = "VeryLazy",
     config = function()
