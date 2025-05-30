@@ -107,6 +107,7 @@ return {
       }
       conf.defaults.mappings.n = {
         ["<C-t>"] = require("trouble.sources.telescope").open,
+        ["q"] = require("telescope.actions").close,
       }
 
       return conf
@@ -267,6 +268,12 @@ return {
       "github/copilot.vim",
       "ravitemer/codecompanion-history.nvim",
     },
+    config = function(_, opts)
+      local spinner = require "configs.spinner"
+      spinner:init()
+
+      require("codecompanion").setup(opts)
+    end,
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
