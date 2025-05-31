@@ -298,6 +298,7 @@ return {
       spinner:init()
 
       require("codecompanion").setup(opts)
+      require("configs.codecompanion.index").setup()
     end,
   },
   {

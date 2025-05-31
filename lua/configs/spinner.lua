@@ -3,18 +3,7 @@ local M = {
   spinner_index = 1,
   namespace_id = nil,
   timer = nil,
-  spinner_symbols = {
-    "⠋",
-    "⠙",
-    "⠹",
-    "⠸",
-    "⠼",
-    "⠴",
-    "⠦",
-    "⠧",
-    "⠇",
-    "⠏",
-  },
+  spinner_symbols = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
   filetype = "codecompanion",
 }
 
