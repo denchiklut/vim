@@ -1,31 +1,41 @@
 local M = {}
+M.__index = M
 
-M.set_extmark = function(buff, ns, line_num, sign_text)
-  vim.api.nvim_buf_set_extmark(buff, ns, line_num - 1, 0, {
-    sign_hl_group = "DiagnosticVirtualTextWarn",
-    sign_text = sign_text,
-    priority = 2048,
-  })
+function M.new(context, ns)
+  return setmetatable({
+    bufnr = context.bufnr,
+    start_line = context.start_line,
+    end_line = context.end_line,
+    ns = ns,
+  }, M)
 end
 
-M.create_extmarks = function(context, ns)
-  if context.start_line == context.end_line then
-    return M.set_extmark(context.bufnr, ns, context.start_line, "")
+function M:create_extmarks()
+  local function set_extmark(line_num, sign_text)
+    vim.api.nvim_buf_set_extmark(self.bufnr, self.ns, line_num - 1, 0, {
+      sign_hl_group = "DiagnosticVirtualTextWarn",
+      sign_text = sign_text,
+      priority = 2048,
+    })
   end
 
-  M.set_extmark(context.bufnr, ns, context.start_line, "┌")
-
-  for i = context.start_line + 1, context.end_line - 1 do
-    M.set_extmark(context.bufnr, ns, i, "│")
+  if self.start_line == self.end_line then
+    return set_extmark(self.start_line, "")
   end
 
-  if context.end_line > context.start_line then
-    M.set_extmark(context.bufnr, ns, context.end_line, "└")
+  set_extmark(self.start_line, "┌")
+
+  for i = self.start_line + 1, self.end_line - 1 do
+    set_extmark(i, "│")
+  end
+
+  if self.end_line > self.start_line then
+    set_extmark(self.end_line, "└")
   end
 end
 
-M.clear_extmarks = function(context, ns)
-  vim.api.nvim_buf_clear_namespace(context.bufnr, ns, 0, -1)
+function M:clear_extmarks()
+  vim.api.nvim_buf_clear_namespace(self.bufnr, self.ns, 0, -1)
 end
 
 return M

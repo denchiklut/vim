@@ -1,27 +1,18 @@
 local M = {}
+M.__index = M
 
 local virtual_text_spinners = {}
 
-M.start_spinners = function(context, ns)
-  local block_spinner = require("configs.codecompanion.block_spinner").new {
-    bufnr = context.bufnr,
-    ns_id = ns,
-    start_line = context.start_line,
-    end_line = context.end_line,
-    opts = {
-      hl_group = "Comment",
-      repeat_interval = 100,
-      extmark = {
-        virt_text_pos = "overlay",
-        priority = 2048,
-      },
-    },
-  }
+function M.new(context, ns)
+  return setmetatable({ context = context, ns = ns }, M)
+end
 
+function M:start_spinners()
+  local block_spinner = require("configs.codecompanion.block_spinner").new(self.context, self.ns)
   local spinner = require("configs.codecompanion.spinner").new {
-    bufnr = context.bufnr,
-    ns_id = ns,
-    line_num = context.start_line + math.floor((context.end_line - context.start_line) / 2),
+    ns_id = self.ns,
+    bufnr = self.context.bufnr,
+    line_num = self.context.start_line + math.floor((self.context.end_line - self.context.start_line) / 2),
     width = block_spinner.width,
     opts = {
       repeat_interval = 100,
@@ -31,18 +22,21 @@ M.start_spinners = function(context, ns)
 
   spinner:start()
   block_spinner:start()
-  virtual_text_spinners[ns] = { spinner, block_spinner }
+  virtual_text_spinners[self.ns] = { spinner, block_spinner }
 end
 
-M.stop_spinner = function(ns_id)
-  local block_spinner, spinner = unpack(virtual_text_spinners[ns_id])
+function M:stop_spinner()
+  local block_spinner, spinner = unpack(virtual_text_spinners[self.ns])
+
   if spinner then
     spinner:stop()
   end
+
   if block_spinner then
     block_spinner:stop()
   end
-  virtual_text_spinners[ns_id] = nil
+
+  virtual_text_spinners[self.ns] = nil
 end
 
 return M

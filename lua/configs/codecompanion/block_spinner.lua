@@ -1,31 +1,8 @@
-local spinner_opts = {
-  hl_group = "Comment",
-  repeat_interval = 100,
-  extmark = {
-    virt_text_pos = "inline",
-    priority = 1000,
-    virt_text_repeat_linebreak = true,
-  },
-}
+local M = {}
+M.__index = M
 
-local M = {
-  bufnr = 0,
-  ns_id = 0,
-  start_line = 0,
-  end_line = 0,
-  ids = {},
-  patterns = {},
-  current_index = 1,
-  timer = nil,
-  opts = spinner_opts,
-  width = 0,
-  height = 0,
-  border_top = "",
-  border_bottom = "",
-}
-
-function M.new(opts)
-  local lines = vim.api.nvim_buf_get_lines(opts.bufnr, opts.start_line - 1, opts.end_line, false)
+function M.new(context, ns)
+  local lines = vim.api.nvim_buf_get_lines(context.bufnr, context.start_line - 1, context.end_line, false)
   local width = vim.fn.max(vim
     .iter(lines)
     :map(function(line)
@@ -33,18 +10,12 @@ function M.new(opts)
     end)
     :totable())
 
-  local merged_opts = vim.tbl_deep_extend("force", spinner_opts, opts.opts or {})
   local patterns = {}
-
   local raw_patterns = {
     "╲  ",
     " ╲ ",
     "  ╲",
   }
-
-  if merged_opts.patterns and #merged_opts.patterns > 0 then
-    raw_patterns = merged_opts.patterns
-  end
 
   local pattern_width = vim.fn.strdisplaywidth(raw_patterns[1])
   local repetitions = pattern_width > 0 and math.ceil(width / pattern_width) or width
@@ -55,20 +26,19 @@ function M.new(opts)
   end
 
   return setmetatable({
-    bufnr = opts.bufnr,
-    ns_id = opts.ns_id,
-    start_line = opts.start_line - 1,
-    end_line = opts.end_line - 1,
+    bufnr = context.bufnr,
+    ns = ns,
+    start_line = context.start_line - 1,
+    end_line = context.end_line - 1,
     ids = {},
     patterns = patterns,
     current_index = 1,
     timer = vim.uv.new_timer(),
-    opts = merged_opts,
     width = width,
     height = #lines,
     border_top = "╭" .. horizontal_line .. "╮",
     border_bottom = "╰" .. horizontal_line .. "╯",
-  }, { __index = M })
+  }, M)
 end
 
 function M:get_virtual_text(i)
@@ -90,42 +60,43 @@ function M:get_virtual_text(i)
   return { { "│" .. pattern .. "│", "Comment" } }
 end
 
+function M:write_extmarks(start, pos, id)
+  return vim.api.nvim_buf_set_extmark(self.bufnr, self.ns, start, 0, {
+    virt_text = self:get_virtual_text(pos or start),
+    virt_text_repeat_linebreak = true,
+    virt_text_pos = "overlay",
+    priority = 2048,
+    id = id,
+  })
+end
+
 function M:set_new_extmarks()
   self.ids = {}
+
   for i = self.start_line, self.end_line do
-    self.ids[i] = vim.api.nvim_buf_set_extmark(
-      self.bufnr,
-      self.ns_id,
-      i,
-      0,
-      vim.tbl_deep_extend("force", self.opts.extmark, { virt_text = self:get_virtual_text(i) })
-    )
+    self.ids[i] = self:write_extmarks(i)
   end
 end
 
-function M:set_extmarks()
+function M:animate_extmarks()
   for i, id in pairs(self.ids) do
-    local current_pos = vim.api.nvim_buf_get_extmark_by_id(self.bufnr, self.ns_id, id, {})
+    local current_pos = vim.api.nvim_buf_get_extmark_by_id(self.bufnr, self.ns, id, {})
+
     pcall(function()
-      vim.api.nvim_buf_set_extmark(
-        self.bufnr,
-        self.ns_id,
-        current_pos[1],
-        0,
-        vim.tbl_deep_extend("force", self.opts.extmark, { virt_text = self:get_virtual_text(i), id = id })
-      )
+      self:write_extmarks(current_pos[1], i, id)
     end)
   end
 end
 
 function M:start()
   self:set_new_extmarks()
+
   self.timer:start(
     0,
-    self.opts.repeat_interval,
+    100,
     vim.schedule_wrap(function()
       self.current_index = (self.current_index % #self.patterns) + 1
-      self:set_extmarks()
+      self:animate_extmarks()
     end)
   )
 end
@@ -136,12 +107,11 @@ function M:stop()
     self.timer:close()
     self.timer = nil
   end
-  if self.opts.extmark then
-    for _, id in pairs(self.ids) do
-      vim.schedule(function()
-        vim.api.nvim_buf_del_extmark(self.bufnr, self.ns_id, id)
-      end)
-    end
+
+  for _, id in pairs(self.ids) do
+    vim.schedule(function()
+      vim.api.nvim_buf_del_extmark(self.bufnr, self.ns, id)
+    end)
   end
 end
 

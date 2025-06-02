@@ -1,6 +1,3 @@
-local extmarks = require "configs.codecompanion.extmarks"
-local loader = require "configs.codecompanion.loader"
-
 local M = {}
 
 M.setup = function()
@@ -15,13 +12,15 @@ M.setup = function()
       end
 
       local ns = vim.api.nvim_create_namespace("CodeCompanionInline_" .. data.id)
+      local extmarks = require("configs.codecompanion.extmarks").new(context, ns)
+      local block_spinner = require("configs.codecompanion.block_spinner").new(context, ns)
 
       if args.match:find "StartedInline" then
-        extmarks.create_extmarks(context, ns)
-        loader.start_spinners(context, ns)
+        extmarks:create_extmarks()
+        block_spinner:start()
       elseif args.match:find "FinishedInline" then
-        extmarks.clear_extmarks(context, ns)
-        loader.stop_spinner(ns)
+        extmarks:clear_extmarks()
+        block_spinner:stop()
       end
     end,
   })

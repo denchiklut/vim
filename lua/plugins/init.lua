@@ -96,7 +96,7 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {},
-    dependencies = { "MunifTanjim/nui.nvim" },
+    dependencies = { "MunifTanjim/nui.nvim", "folke/which-key.nvim" },
   },
   {
     "nvim-telescope/telescope.nvim",
